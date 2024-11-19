@@ -1,6 +1,6 @@
 # Nuxt.js - Bootstrap | WR505D
 
-## Liste communale française
+## Liste communale française - Qualité de l'air - Géolocalisation
 
 Ce projet, réalisé dans la ressource R5.DWeb-DI.05 du BUT MMI, est une site web crée sous le framework `Nuxt.js` qui permet de promouvoir toutes les communes de France, ainsi que leur qualité d'air et leur géolocalisation sur une carte interactive. Le tout grâce à des API permettant de prendre leurs informations.
 
