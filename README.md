@@ -8,9 +8,7 @@ Ce projet, réalisé dans la ressource R5.DWeb-DI.05 du BUT MMI, est une site we
 `Nuxt 3 / Vue3` - `Bootstrap` - `Axios` - `Vue Leaflet`
 
 ### API utilisées :
-- [API Géo](https://geo.api.gouv.fr/decoupage-administratif/communes)
-- [World Air Quality Index](https://waqi.info/)
-- [API Adresse](https://adresse.data.gouv.fr/api-doc)
+[API Géo](https://geo.api.gouv.fr/decoupage-administratif/communes) - [World Air Quality Index](https://waqi.info/) - [API Adresse](https://adresse.data.gouv.fr/api-doc)
 
 ### Installation et lancement du projet :
 ```
