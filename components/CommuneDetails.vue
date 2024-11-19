@@ -48,12 +48,12 @@
           <!-- Détails des composants -->
           <h4 class="card-subtitle mb-3">Détails des composants :</h4>
           <ul>
+                        <li><strong>Température (°C) :</strong> {{ airQuality.iaqi.t?.v || 'Non disponible' }}</li>
             <li><strong>Ozone (O₃) :</strong> {{ airQuality.iaqi.o3?.v || 'Non disponible' }}</li>
             <li><strong>Dioxyde d'azote (NO₂) :</strong> {{ airQuality.iaqi.no2?.v || 'Non disponible' }}</li>
             <li><strong>Particules fines PM10 :</strong> {{ airQuality.iaqi.pm10?.v || 'Non disponible' }}</li>
             <li><strong>Particules fines PM2.5 :</strong> {{ airQuality.iaqi.pm25?.v || 'Non disponible' }}</li>
             <li><strong>Dioxyde de soufre (SO₂) :</strong> {{ airQuality.iaqi.so2?.v || 'Non disponible' }}</li>
-            <li><strong>Température (°C) :</strong> {{ airQuality.iaqi.t?.v || 'Non disponible' }}</li>
           </ul>
         </div>
       </div>
