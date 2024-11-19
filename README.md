@@ -18,4 +18,4 @@ npm install
 npm run dev
 ```
 
-### © 2023-2024 Quentin Buteau & Minh 'Moshi' Thai | Tous droits réservés
+### © 2024 Quentin Buteau & Minh 'Moshi' Thai | Tous droits réservés
