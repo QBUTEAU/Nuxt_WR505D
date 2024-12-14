@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
     <!-- Bouton Retour -->
     <NuxtLink to="/" class="btn btn-secondary mb-4">
       ← Retour
@@ -12,43 +12,32 @@
     <h2 class="card-title mb-3">Informations de la commune :</h2>
     <div class="card">
       <div class="card-body">
-        <!-- Code Postal principal -->
         <p class="card-text"><strong>Code Postal principal :</strong>
           {{ communeDetails.codesPostaux && communeDetails.codesPostaux.length > 0
               ? communeDetails.codesPostaux[0]
               : 'Aucun code postal disponible' }}
         </p>
-        <!-- Département -->
         <p class="card-text"><strong>Département :</strong> {{ departmentName }} ({{ communeDetails.codeDepartement }})</p>
-        <!-- Région -->
         <p class="card-text mb-3"><strong>Région :</strong> {{ regionName }} ({{ communeDetails.codeRegion }})</p>
-        <!-- Population -->
         <p class="card-text mb-3"><strong>Population :</strong> {{ communeDetails.population }} habitants</p>
-        <!-- Code INSEE -->
         <p class="card-text"><strong>Code INSEE :</strong> {{ communeDetails.code }}</p>
-        <!-- Code EPCI -->
         <p class="card-text"><strong>Code EPCI :</strong> {{ communeDetails.codeEpci }}</p>
-        <!-- SIREN -->
         <p class="card-text"><strong>SIREN :</strong> {{ communeDetails.siren }}</p>
       </div>
     </div>
 
     <!-- Section Qualité de l'air -->
-    <div class="mt-4">
+    <div class="mt-4 mb-4">
       <h2 class="card-title mb-3">Qualité de l'air :</h2>
-      <!-- Chargement -->
       <p v-if="!airQuality">La qualité de l'air de cette commune n'a pas été évaluée.</p>
-      <!-- Affichage des données -->
       <div v-else class="card">
         <div class="card-body">
-          <!-- Indice actuel AQI -->
           <h4 class="card-title">Indice de qualité de l'air (AQI) : {{ airQuality.aqi }}</h4>
           <p><strong>Polluant dominant :</strong> {{ airQuality.dominentpol }}</p>
           <hr />
-          <!-- Détails des composants -->
           <h4 class="card-subtitle mb-3">Détails des composants :</h4>
           <ul>
-                        <li><strong>Température (°C) :</strong> {{ airQuality.iaqi.t?.v || 'Non disponible' }}</li>
+            <li><strong>Température (°C) :</strong> {{ airQuality.iaqi.t?.v || 'Non disponible' }}</li>
             <li><strong>Ozone (O₃) :</strong> {{ airQuality.iaqi.o3?.v || 'Non disponible' }}</li>
             <li><strong>Dioxyde d'azote (NO₂) :</strong> {{ airQuality.iaqi.no2?.v || 'Non disponible' }}</li>
             <li><strong>Particules fines PM10 :</strong> {{ airQuality.iaqi.pm10?.v || 'Non disponible' }}</li>
@@ -59,18 +48,17 @@
       </div>
     </div>
 
-    <!-- Géolocalisation sur la carte -->
-    <div class="mt-4">
-      <h2>Géolocalisation :</h2>
-      <LMap v-if="latitude && longitude" :zoom="13" :center="[latitude, longitude]" style="height: 400px; width: 100%;">
-        <LTileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
-        <LMarker :lat-lng="[latitude, longitude]" />
-      </LMap>
-      <p v-else>Chargement de la carte...</p>
-    </div>
+    <!-- Carte Leaflet -->
+    <!-- Carte Leaflet -->
+<div class="mt-4">
+  <h2 class="card-title mb-3" >Géolocalisation :</h2>
+  <LMap v-if="center && center.length === 2" :zoom="zoom" :center="center" style="height: 500px; width: 100%;">
+    <LTileLayer :url="tileUrl" :attribution="tileAttribution" />
+    <LMarker :lat-lng="center" />
+  </LMap>
+  <p v-else>Chargement de la carte...</p>
+</div>
+
   </div>
 </template>
 
@@ -78,6 +66,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet';
+import { tileLayer, marker } from 'leaflet';
 
 const props = defineProps({
   communeName: String, // Nom de la commune reçu comme prop
@@ -85,10 +74,12 @@ const props = defineProps({
 
 const communeDetails = ref({});
 const airQuality = ref(null);
-const latitude = ref(null);
-const longitude = ref(null);
-const departmentName = ref(''); // Stocke le nom du département
-const regionName = ref(''); // Stocke le nom de la région
+const center = ref(null); // Coordonnées pour la carte (latitude, longitude)
+const zoom = ref(13); // Niveau de zoom de la carte
+const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"; // URL des tuiles OSM
+const tileAttribution = '&copy; OpenStreetMap contributors'; // Attribution OSM
+const departmentName = ref('');
+const regionName = ref('');
 
 // Fonction pour récupérer les détails de la commune
 const fetchCommuneDetails = async () => {
@@ -99,8 +90,8 @@ const fetchCommuneDetails = async () => {
     if (data.length > 0) {
       const commune = data[0];
       communeDetails.value = commune;
-      latitude.value = commune.centre.coordinates[1];
-      longitude.value = commune.centre.coordinates[0];
+      const [lon, lat] = commune.centre.coordinates; // Coordonnées de la commune
+      center.value = [lat, lon]; // Met à jour les coordonnées pour la carte
       await fetchDepartmentName(commune.codeDepartement);
       await fetchRegionName(commune.codeRegion);
       await fetchAirQuality(commune.nom);

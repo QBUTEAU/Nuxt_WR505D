@@ -31,9 +31,8 @@
     </div>
 
     <!-- Bouton Voir plus uniquement si la pagination est activée -->
-    <div class="text-center mt-4 mb-5" v-if="!search.length">
+    <div class="text-center mt-4 mb-5" v-if="displayedCommunes.length < filteredCommunes.length">
       <button
-        v-if="currentPage * itemsPerPage < filteredCommunes.length"
         @click="loadMore"
         class="btn btn-primary"
       >
@@ -79,7 +78,15 @@ const loadMore = () => {
 // Réinitialiser la liste des communes affichées lors de la recherche
 watch(search, () => {
   currentPage.value = 1;
-  displayedCommunes.value = filteredCommunes.value.slice(0, itemsPerPage);  // Affiche les résultats de recherche sans pagination
+  if (search.value) {
+    if (filteredCommunes.value.length > itemsPerPage) {
+      displayedCommunes.value = filteredCommunes.value.slice(0, itemsPerPage); // Affiche les résultats de recherche avec pagination
+    } else {
+      displayedCommunes.value = filteredCommunes.value; // Affiche tous les résultats de recherche sans pagination
+    }
+  } else {
+    displayedCommunes.value = filteredCommunes.value.slice(0, itemsPerPage); // Affiche les résultats avec pagination
+  }
 });
 </script>
 

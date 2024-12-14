@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/seo": "^2.0.2",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
